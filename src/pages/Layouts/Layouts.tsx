@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import Drawer from "./Components/Drawer/Drawer";
-import Header from "./Components/Drawer/Header/Header";
-import Mains from "./Components/Drawer/Mains/Mains";
-import Footer from "./Components/Drawer/Footer/Footer";
+import { useState } from "react";
+import Drawer from "./Drawer/Drawer";
+import Header from ".//Header/Header";
+import Mains from ".//Mains/Mains";
+import Footer from ".//Footer/Footer";
 import { S_transition } from "./styles";
 import { Box } from "@mui/material";
 import { DRAWER_WIDTH, FOLDER_DRAWER_WIDTH } from "../../shared/constants";
+import { Outlet } from "react-router-dom";
 
 function Layouts() {
   const [open, setOpen] = useState(true);
@@ -30,7 +31,9 @@ function Layouts() {
         }}
       >
         <Header open={open} toggleDrawer={toggleDrawer} />
-        <Mains />
+        <main style={{ display: 'flex', flex: 1, padding: '0 24px 24px', }}>
+          <Outlet />
+        </main>
         <Footer />
       </Box>
     </Box>
