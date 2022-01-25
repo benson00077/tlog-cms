@@ -19,7 +19,6 @@ function Mains() {
         path={route.path}
         element={route.component}
       >
-
       </Route>
 
     )

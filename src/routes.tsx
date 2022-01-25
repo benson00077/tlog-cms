@@ -57,35 +57,35 @@ const routes: Route[] = [
         path: '/motto',
         component: 'Home/Motto/Motto',
       },
-      {
-        name: 'Open Source',
-        path: '/open-source',
-        component: 'Home/OpenSource/OpenSource',
-      },
+      // {
+      //   name: 'Open Source',
+      //   path: '/open-source',
+      //   component: 'Home/OpenSource/OpenSource',
+      // },
     ],
   },
-  {
-    name: 'Music',
-    path: '/music',
-    icon: <Headset />,
-    routes: [
-      {
-        name: 'Best Album',
-        path: '/best-album',
-        component: 'Music/BestAlbum/BestAlbum',
-      },
-      {
-        name: 'Live Tour',
-        path: '/live-tour',
-        component: 'Music/LiveTour/LiveTour',
-      },
-      {
-        name: 'Player',
-        path: '/player',
-        component: 'Music/Player/Player',
-      },
-    ],
-  },
+  // {
+  //   name: 'Music',
+  //   path: '/music',
+  //   icon: <Headset />,
+  //   routes: [
+  //     {
+  //       name: 'Best Album',
+  //       path: '/best-album',
+  //       component: 'Music/BestAlbum/BestAlbum',
+  //     },
+  //     {
+  //       name: 'Live Tour',
+  //       path: '/live-tour',
+  //       component: 'Music/LiveTour/LiveTour',
+  //     },
+  //     {
+  //       name: 'Player',
+  //       path: '/player',
+  //       component: 'Music/Player/Player',
+  //     },
+  //   ],
+  // },
   {
     name: 'Post',
     path: '/post',
@@ -112,33 +112,33 @@ const routes: Route[] = [
       },
     ],
   },
-  {
-    name: 'Settings',
-    path: '/settings',
-    icon: <Settings />,
-    routes: [
-      {
-        name: 'Profile',
-        path: '/settings/profile',
-        component: 'Settings/Profile/Profile',
-      },
-      {
-        name: 'Account',
-        path: '/settings/account',
-        component: 'Settings/Account/Account',
-      },
-      {
-        name: 'Security',
-        path: '/settings/security',
-        component: 'Settings/Security/Security',
-      },
-      {
-        name: 'Global Config',
-        path: '/settings/global-config',
-        component: 'Settings/GlobalConfig/GlobalConfig',
-      },
-    ],
-  },
+  // {
+  //   name: 'Settings',
+  //   path: '/settings',
+  //   icon: <Settings />,
+  //   routes: [
+  //     {
+  //       name: 'Profile',
+  //       path: '/settings/profile',
+  //       component: 'Settings/Profile/Profile',
+  //     },
+  //     {
+  //       name: 'Account',
+  //       path: '/settings/account',
+  //       component: 'Settings/Account/Account',
+  //     },
+  //     {
+  //       name: 'Security',
+  //       path: '/settings/security',
+  //       component: 'Settings/Security/Security',
+  //     },
+  //     {
+  //       name: 'Global Config',
+  //       path: '/settings/global-config',
+  //       component: 'Settings/GlobalConfig/GlobalConfig',
+  //     },
+  //   ],
+  // },
 ]
 
 export function mapRoutes() {
