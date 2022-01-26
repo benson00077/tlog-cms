@@ -16,7 +16,7 @@ function Layouts() {
   }
 
   return (
-    <Box sx={{ display: "flex", overflowX: "hidden" }}>
+    <div style={{ display: "flex", overflowX: "hidden" }}>
       <Drawer open={open} />
       <Box
         component="section"
@@ -36,7 +36,7 @@ function Layouts() {
         </main>
         <Footer />
       </Box>
-    </Box>
+    </div>
   );
 }
 

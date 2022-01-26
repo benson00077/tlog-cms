@@ -4,16 +4,18 @@ import { RouteChildren } from '../../../routes'
 
 type ChildItemProps = {
   open: boolean
+  isCollaspe: () => boolean
   childRoute: RouteChildren
 }
 
-function ChildItem({ open, childRoute }: ChildItemProps) {
+function ChildItem({ open, isCollaspe, childRoute }: ChildItemProps) {
   const { name, isExternalLink } = childRoute
   return (
-    <div>
+    <div
+      className={`linkItem`}
+    >
       <span>
         {/* {getInitials(name)} */}
-        {name}
       </span>
       <div>
         <span>{name}</span>

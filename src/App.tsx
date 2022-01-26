@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layouts from './pages/Layouts/Layouts';
 import loadable from '@loadable/component';
 import { mapRoutes } from './routes'
+import './global.scss'
+
 
 
 // TODO: lazy loading / code splitting for those Nested Route page

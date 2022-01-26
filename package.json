@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/loadable__component": "^5.13.4"
+    "@types/loadable__component": "^5.13.4",
+    "sass": "^1.49.0"
   }
 }
