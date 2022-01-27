@@ -1,9 +1,7 @@
 import { Fragment, useState } from "react";
-import { Avatar, Box } from "@mui/material";
-import { ArrowRightRounded, Face, Home } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
+import { Face, Home } from "@mui/icons-material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import * as S from "./styles";
-import { classes } from "./styles";
 import { NavLink } from "react-router-dom";
 import routes from '../../../routes'
 import ParentItem from "./ParentItem";
