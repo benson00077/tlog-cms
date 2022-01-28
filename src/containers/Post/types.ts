@@ -1,5 +1,6 @@
 export interface IPostItem {
-  readonly id: string
+  readonly _id: string
+  id?: string
   readonly posterUrl: string
   readonly title: string
   readonly summary: string

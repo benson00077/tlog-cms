@@ -20,10 +20,12 @@ import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { IPostItem } from './types';
 
 type props = {
+  updatePostById: Function
   dataSource: IPostItem[]
+  isFetching: boolean
 }
 
-function PostTable({ dataSource }: props) {
+function PostTable({ dataSource, updatePostById, isFetching }: props) {
 
 
   /** 
@@ -34,16 +36,18 @@ function PostTable({ dataSource }: props) {
   //   { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
   //   { id: 3, col1: 'MUI', col2: 'is Amazing' },
   // ]), [])
-  const rows: GridRowsProp = React.useMemo(() => dataSource, [])
+
+  // TODO: _id -> id from backend
+  const rows: GridRowsProp = dataSource.map((post) => ({ ...post, id: post._id }))
   const columns: GridColDef[] = React.useMemo(() => ([
     { field: 'id', headerName: 'id', width: 150 },
     { field: 'title', headerName: 'Title', width: 150 },
     { field: 'summary', headerName: 'Summary', width: 150 },
     { field: 'tags', headerName: 'Tags', width: 150 },
     { field: 'posterUrl', headerName: 'PosterUrl', width: 150 },
-    { field: 'isPublic', headerName: 'isPublic', width: 150 },
-    { field: 'like', headerName: 'Like', width: 150 },
-    { field: 'pv', headerName: 'PV', width: 150 },
+    { field: 'isPublic', headerName: 'isPublic', width: 90 },
+    { field: 'like', headerName: 'Like', width: 60 },
+    { field: 'pv', headerName: 'PV', width: 60 },
     { field: 'createdAt', headerName: 'CreatedAt', width: 150 },
     { field: 'updatedAt', headerName: 'Last Modified Dated', width: 150 },
     { field: 'action', headerName: 'Action', width: 150 },
@@ -86,6 +90,12 @@ function PostTable({ dataSource }: props) {
       <div style={{ height: '80%', width: '100%' }}>
         <DataGrid rows={rows} columns={columns}></DataGrid>
       </div>
+
+      <button onClick={() => updatePostById({
+        variables: { input: { isPublic: false, id: '143a8eef-0970-431b-973b-c1b493fbd366' } }
+      })}>
+        Test to upgrade post by id
+      </button>
     </>
   )
 }
