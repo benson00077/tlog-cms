@@ -1,0 +1,24 @@
+.editorWrapper {
+  margin-top: 8px;
+  width: 100%;
+
+  form .header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  form .description {
+    width: 50%;
+    margin: 24px 0 48px 0;
+  }
+}
+
+.publishTools {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .btn {
+    //TODO:: theme spacing
+  }
+}

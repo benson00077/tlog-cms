@@ -13,3 +13,8 @@ export interface IPostItem {
   readonly createdAt: string
   readonly updatedAt: string
 }
+
+export enum DraftType {
+  DRAFT,
+  FINAL
+}
