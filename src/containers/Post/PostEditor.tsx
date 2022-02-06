@@ -36,6 +36,7 @@ import UploaderModal from "./UploaderModal";
 
 /**
  *  TODO: Refactor editorWrapper into 3 - header, description, editor
+ *  TODO: fetch url query params - useful when editing previous post, use query-string.js
  */
 function PostEditor() {
   
