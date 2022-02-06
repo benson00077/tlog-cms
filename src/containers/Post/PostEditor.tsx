@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import chartPlugin from "@toast-ui/editor-plugin-chart";
@@ -20,7 +20,7 @@ import {
 import { useFormik } from "formik";
 import "./PostEditor.scss";
 import { DraftType } from "./types";
-import { getMarkdown } from "./utils";
+import { getMarkdown, insertImage, setUploaderToolbarItem } from "./utils";
 import { useMutation } from "@apollo/client";
 import { CREATE_ONE_POST } from "./typeDefs";
 import { PhotoCamera } from "@mui/icons-material";
@@ -32,16 +32,22 @@ import {
 import Uploader, {
   IUploaderResponse,
 } from "../../components/Uploader/Uploader";
+import UploaderModal from "./UploaderModal";
 
 /**
  *  TODO: Refactor editorWrapper into 3 - header, description, editor
  */
 function PostEditor() {
-  const editorRef = useRef<Editor>(null);
-
+  
   /* graphql */
   const [createPost, { loading: isCreatingPost }] =
-    useMutation(CREATE_ONE_POST);
+  useMutation(CREATE_ONE_POST);
+  
+  /* editor */
+  const editorRef = useRef<Editor>(null);
+  const [open, setOpen] = useState(false);
+  const [image, setImage] = useState<IUploaderResponse>({ name: '', url: '' })
+  const handleEditorImageChange = (file: IUploaderResponse) => setImage(file)
 
   /* formik */
   const formik = useFormik({
@@ -78,6 +84,11 @@ function PostEditor() {
     formik.resetForm();
   };
 
+
+  useEffect(() => {
+    setUploaderToolbarItem(editorRef, setOpen) // click to open UploaderModal.tsx
+  }, [])
+
   return (
     <section className="editorWrapper">
       <form>
@@ -97,7 +108,7 @@ function PostEditor() {
               value={formik.values.posterUrl}
               required
               label="PosterUrl"
-              disabled={true}
+              // disabled={true}
             />
 
             <PopupState variant="popover" popupId="lrcPoperOver">
@@ -187,7 +198,8 @@ function PostEditor() {
           ["heading", "bold", "italic", "strike"],
           ["hr", "quote"],
           ["ul", "ol", "task", "indent", "outdent"],
-          ["table", "image", "link"],
+          // ["table", "image", "link"],  // setUploaderToolbarItem() replace image toolbaritem
+          ["table", "link"],
           ["code", "codeblock"],
         ]}
         plugins={[
@@ -198,6 +210,13 @@ function PostEditor() {
           // embededPlugin,
         ]}
         ref={editorRef}
+      />
+
+      <UploaderModal 
+        open={open}
+        onClose={setOpen}
+        onChange={handleEditorImageChange}
+        onOk={() => insertImage(editorRef, image)}
       />
     </section>
   );
