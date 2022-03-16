@@ -25,6 +25,18 @@ const POST_FRAGMENT = gql`
   }
 `;
 
+export const GET_POST_BY_ID = gql`
+  query getPostById ($id: ID!){
+    getPostById (id: $id){
+        title
+        content
+        summary
+        tags
+        posterUrl
+      }
+    }
+`
+
 export const CREATE_ONE_POST = gql`
   mutation CreatePost($input: CreatePostInput!) {
     createPost(input: $input) {

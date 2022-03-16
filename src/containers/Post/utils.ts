@@ -2,6 +2,11 @@ import { Editor } from "@toast-ui/react-editor"
 import { RefObject } from "react"
 import { IUploaderResponse } from "../../components/Uploader/Uploader"
 
+
+/*
+ *  NOTICE: uncontrolled component 
+ */
+
 export const getMarkdown = (editorRef: RefObject<Editor>) => {
   return editorRef.current 
     ? editorRef.current?.getInstance().getMarkdown()
