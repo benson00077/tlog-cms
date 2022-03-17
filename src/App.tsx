@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Layouts from './pages/Layouts/Layouts';
 import loadable from '@loadable/component';
 import { mapRoutes } from './routes'
 import './global.scss'
 import { ApolloProvider } from '@apollo/client';
 import client from './graphql/apolloClient'
+import Login from './pages/Auth/Login';
 
 
 
@@ -19,26 +20,35 @@ function App() {
         <Router>
           <Routes>
 
-            <Route path="/login">
-              Test
-            </Route>
+            <Route path="/login" element={<Login />} />
 
-            <Route path="/" element={<Layouts />}>
-              {routeList.map(route => {
-                const AsyncComponent = loadable(
-                  () => import(`./containers/${route.component}`),
-                  { fallback: <h1>Loading</h1> }
-                )
+            <Route path="/register" element={<div>Todo</div>} />
 
-                return (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={<AsyncComponent />} />
-                )
-              })}
-              <Route path="*" element={<h1>-----------404 not found</h1>} />
-            </Route>
+            {
+              window.localStorage.getItem('token')
+                ? <Route path="/" element={<Layouts />}>
+                  {routeList.map(route => {
+                    const AsyncComponent = loadable(
+                      () => import(`./containers/${route.component}`),
+                      { fallback: <h1>Loading</h1> }
+                    )
+
+                    return (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={<AsyncComponent />} />
+                    )
+                  })}
+                </Route>
+                : null
+            }
+
+            <Route path="*" element={
+              window.localStorage.getItem('token')
+                ? <h1>-----------404 not found</h1>
+                : <Navigate to="/login" />
+            } />
 
           </Routes>
         </Router>
