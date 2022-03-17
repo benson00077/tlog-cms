@@ -12,6 +12,7 @@ function Login() {
     onCompleted(data) {
       window.localStorage.setItem('token', data.login.access_token)
       window.localStorage.setItem('userId', data.login._id)
+      // TODO : FIXME: sometimes failed ? -- use breakpoint
       navigate({
         pathname: "/"
       })
