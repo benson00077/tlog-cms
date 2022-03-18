@@ -10,9 +10,21 @@ function Login() {
   const [login, { called, loading }] = useLazyQuery(LOGIN, {
     notifyOnNetworkStatusChange: true,
     onCompleted(data) {
+      // const handler = async () => {
+      //   await window.localStorage.setItem('token', data.login.access_token)
+      //   await window.localStorage.setItem('userId', data.login._id)
+      //   // TODO : FIXME: sometimes failed ? -- use breakpoint
+      //   await navigate({
+      //     pathname: "/"
+      //   })
+      //   console.log("Nagigate after logged in...")
+      // }
+      // handler()
+
       window.localStorage.setItem('token', data.login.access_token)
       window.localStorage.setItem('userId', data.login._id)
       // TODO : FIXME: sometimes failed ? -- use breakpoint
+      // FIXME: after Refresh, login fialed redirect. Problem might form App.tsx Route logic
       navigate({
         pathname: "/"
       })
@@ -27,7 +39,7 @@ function Login() {
   const validationSchema = {}
   const { handleSubmit, getFieldProps, errors } = useFormik({
     initialValues,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       login({
         variables: { input: { ...values }}
       })

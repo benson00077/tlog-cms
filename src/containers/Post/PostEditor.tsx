@@ -20,9 +20,9 @@ import {
 import { useFormik } from "formik";
 import "./PostEditor.scss";
 import { DraftType, IPostItem } from "./types";
-import { getMarkdown, insertImage, setUploaderToolbarItem } from "./utils";
+import { getMarkdown, insertImage, setMarkdown, setUploaderToolbarItem } from "./utils";
 import { useMutation } from "@apollo/client";
-import { CREATE_ONE_POST, GET_POST_BY_ID } from "./typeDefs";
+import { CREATE_ONE_POST, GET_POST_BY_ID, UPDATE_ONE_POST } from "./typeDefs";
 import { PhotoCamera, TagFacesSharp } from "@mui/icons-material";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import {
@@ -33,7 +33,7 @@ import Uploader, {
   IUploaderResponse,
 } from "../../components/Uploader/Uploader";
 import UploaderModal from "./UploaderModal";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import client from "../../graphql/apolloClient";
 
 /**
@@ -42,12 +42,26 @@ import client from "../../graphql/apolloClient";
  */
 function PostEditor() {
   /* graphql */
-  const [createPost, { loading: isCreatingPost }] =
-    useMutation(CREATE_ONE_POST);
+  const [createPost, { loading: isCreatingPost }] = useMutation(CREATE_ONE_POST, {
+    onCompleted(data) {
+      const { _id, title, isPublic, summary, posterUrl, tags } = data.createPost
+    },
+    onError() {}
+  });
+  const [updatePostById, { loading: isUpdateingPost }] = useMutation(UPDATE_ONE_POST, {
+    onCompleted(data) {
+      const { _id, title, summary, isPublic, posterUrl, tags } = data.updatePostById
+      console.log("updatePostById", data)
+    },
+    onError() {}
+  })
 
   /* URL query para*/
   let [searchParams, setSearchParams] = useSearchParams();
   const EditingPostId = searchParams.get("id");
+
+  /* Router Redirect*/
+  const navigate = useNavigate()
 
 
   /* editor */
@@ -64,7 +78,7 @@ function PostEditor() {
       summary: "",
       tags: [] as string[],
     },
-    onSubmit: () => {},
+    onSubmit: () => { },
   });
   const handleTagsChange = (chips: string[]) => {
     formik.setFieldValue("tags", chips);
@@ -76,6 +90,7 @@ function PostEditor() {
   const submitHandler = async (draftType: DraftType) => {
     const content = getMarkdown(editorRef);
     const lastModifiedDate = new Date().toISOString();
+    const id = searchParams.get("id")
     const params = {
       ...formik.values,
       content,
@@ -83,12 +98,22 @@ function PostEditor() {
       isPublic: draftType === DraftType.FINAL,
     };
 
-    await createPost({
-      variables: {
-        input: params,
-      },
-    });
+    if (draftType === DraftType.FINAL) {
+      await updatePostById({
+        variables: { input: { ...params, id } }
+      })
+    } else {
+      await createPost({
+        variables: {
+          input: params,
+        },
+      });
+    }
+
     formik.resetForm();
+    
+    // Use localStorage to auto save, and then redirect page
+    // navigate({ pathname: "/post" });
   };
 
   useEffect(() => {
@@ -105,9 +130,10 @@ function PostEditor() {
         .then((result) => {
           const { loading, data, error } = result;
           const { title, content, summary, tags, posterUrl } = data.getPostById;
+
+          /** Insert exeist post info into tui markdown editor */
           formik.setValues({ title, summary, tags, posterUrl });
-          handleTagsChange(tags)
-          return tags
+          setMarkdown(editorRef, content)
 
           // TODO:
           // FIXME:
@@ -126,24 +152,27 @@ function PostEditor() {
           // 資料上，可以用 formik.setFieldValue("tags", chips); 插入
           // 畫面上，不太確定⋯⋯⋯⋯
 
-          // TODO:
-          // markdown content not yet update after fetching
+          // test case: 直接不理 UI ，編輯後送出，tags 還是不變 
+          // test case: 直接不理 UI ，新增 tag 編輯後送出，tags 還是不變，新增失敗。
+          handleTagsChange(tags)
+          return tags
+
         })
         .then((tags) => {
           const tagsInput = document.querySelector("input#tags-filled")
           if (!tagsInput) return null
-          console.log(tagsInput)
-          console.log(tags);
+          // console.log(tagsInput)
+          // console.log(tags);
           const event = new Event('input', { bubbles: true });
           tags.forEach((tagText) => {
             tagsInput.dispatchEvent(event);
-            console.log(tagText)
+            // console.log(tagText)
           })
-          console.log(formik.values.tags)
+          // console.log(formik.values.tags)
         })
     }
 
-  
+
   }, [searchParams]);
 
   return (
@@ -165,7 +194,7 @@ function PostEditor() {
               value={formik.values.posterUrl}
               required
               label="PosterUrl"
-              // disabled={true}
+            // disabled={true}
             />
 
             <PopupState variant="popover" popupId="lrcPoperOver">
@@ -233,16 +262,16 @@ function PostEditor() {
               console.log(EditingPostId) // NOTICE: only render when input in TextField
               console.log(value)
               return (
-                  value.map((option, index) => (
-                    <Chip
+                value.map((option, index) => (
+                  <Chip
                     variant="outlined"
                     label={option}
                     {...getTagProps({ index })}
-                    />
-                    ))
-                  )
-                }
-              }
+                  />
+                ))
+              )
+            }
+            }
             renderInput={(params) => (
               <TextField {...params} label="Tags" placeholder="↩" />
             )}

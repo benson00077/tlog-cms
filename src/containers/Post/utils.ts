@@ -12,6 +12,11 @@ export const getMarkdown = (editorRef: RefObject<Editor>) => {
     ? editorRef.current?.getInstance().getMarkdown()
     : ''
 }
+export const setMarkdown = (editorRef: RefObject<Editor>, content: string) => {
+  return editorRef.current  
+    ? editorRef.current.getInstance().setMarkdown(content)
+    : ''
+}
 
 /** For markdown within Editor */
 export const insertImage = (
