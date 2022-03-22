@@ -86,11 +86,19 @@ function PostEditor() {
   const handleImgFileChange = (data: IUploaderResponse) => {
     formik.setFieldValue("posterUrl", data.url);
   };
+  const formFieldInspector = (posterUrl: string, tags: string[], content: string) => {
+    if (!posterUrl) return console.log('Please uploade a poster')
+    if (tags.length === 0) return console.log('Please have at least one tag')
+    if (!content) return console.log('No markdown content. Please wirte sth')
+  }
+  
 
   const submitHandler = async (draftType: DraftType) => {
     const content = getMarkdown(editorRef);
+    formFieldInspector(formik.values.posterUrl, formik.values.tags, content)
     const lastModifiedDate = new Date().toISOString();
     const id = searchParams.get("id")
+
     const params = {
       ...formik.values,
       content,
@@ -98,7 +106,7 @@ function PostEditor() {
       isPublic: draftType === DraftType.FINAL,
     };
 
-    if (draftType === DraftType.FINAL) {
+    if (id) {
       await updatePostById({
         variables: { input: { ...params, id } }
       })
@@ -112,7 +120,7 @@ function PostEditor() {
 
     formik.resetForm();
     
-    // Use localStorage to auto save, and then redirect page
+    // TODO: Use localStorage to auto save, and then redirect page
     // navigate({ pathname: "/post" });
   };
 
@@ -259,8 +267,8 @@ function PostEditor() {
             freeSolo
             defaultValue={EditingPostId ? formik.values.tags : [""]}
             renderTags={(value, getTagProps) => {
-              console.log(EditingPostId) // NOTICE: only render when input in TextField
-              console.log(value)
+              // console.log(EditingPostId) // NOTICE: only render when input in TextField
+              // console.log(value)
               return (
                 value.map((option, index) => (
                   <Chip

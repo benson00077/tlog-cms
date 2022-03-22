@@ -1,7 +1,12 @@
 
 
-## Note 
-cms test
+## Usage
+Create `./env.development` as below example: 
+```bash
+PORT=3002
+REACT_APP_SERVER=http://localhost:3001/graphql # local backend
+REACT_APP_SERVER=https://myDomain/grpahql      # deployed backend
+```
 
 ## TODO
 - backend post data
