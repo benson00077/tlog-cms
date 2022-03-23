@@ -1,0 +1,32 @@
+.loginRoot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #0a1929;
+  color: #f3f6f9;
+
+  .loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    label {
+      color: #f3f6f9; // overwrite mui <TextField>
+    }
+
+    input {
+      color: #f3f6f9; // overwrite mui <TextField>
+    }
+
+
+    h1 {
+      padding-bottom: 2rem;
+    }
+
+    .loginBtn {
+      margin-top: 1rem;
+    }
+  }
+}

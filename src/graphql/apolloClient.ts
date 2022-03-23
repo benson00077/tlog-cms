@@ -32,7 +32,17 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       );
 
       if (extensions.code === "UNAUTHENTICATED") {
-        alert("Expired session. Please log in again.");
+        console.log(extensions) // 
+        console.log(message) // === 'Unauthorized' when expired
+
+        // NOTICE: message is defined in back end logic
+        if (message === 'Unauthroized') {
+          alert("Expired session. Please log in again")
+        } else {
+          // e.g. wrong pwd 
+          alert(message) 
+        }
+
         window.localStorage.clear();
         //NOTE: redirect to login page. see https://stackoverflow.com/a/506004/16124226
         window.location.replace(`/login`);

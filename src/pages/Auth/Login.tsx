@@ -1,8 +1,11 @@
 import { useLazyQuery } from '@apollo/client'
+import { Box, Button, TextField} from '@mui/material'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../components/Auth/useAuth'
 import { LOGIN } from './typeDefs'
+import './Login.scss'
+import { onError } from '@apollo/client/link/error'
 
 function Login() {
 
@@ -27,7 +30,7 @@ function Login() {
     password: '',
   }
   const validationSchema = {}
-  const { handleSubmit, getFieldProps, errors } = useFormik({
+  const { values, handleSubmit, getFieldProps, errors } = useFormik({
     initialValues,
     onSubmit: (values) => {
       login({
@@ -37,30 +40,38 @@ function Login() {
   })
 
   return (
-    <main>
-      <form onSubmit={handleSubmit}>
-        <div>login page</div>
-        <div></div>
-        <label>
-          Email -
-          <input
-            id="email"
+    <main className='loginRoot'>
+      <form className='loginForm' onSubmit={handleSubmit}>
+        <h1>Log in</h1>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            '& > :not(style)': { m: 1 },
+          }}
+        >
+          <TextField
+            size='small'
+            label="Email"
             type="text"
             {...getFieldProps("email")} //name prop for formik
           />
-        </label>
-        <label>
-          Passowrd -
-          <input
-            id="passowrd"
+          <TextField
+            size='small'
+            label="Password"
             type="password"
+            color="secondary"
             {...getFieldProps("password")} //name prop for formik
           />
-        </label>
-        <p>Forgot your password?</p>
-        <button type="submit" disabled={(called && loading)}>To use Mui Btn</button>
+        </Box>
+        <Button type="submit" color="primary" variant="contained" 
+          className='loginBtn'
+          disabled={(values.email && values.password) ? false : true}>
+          {loading ? "Loading...🥳" : "Let me in 👀"}
+        </Button>
       </form>
-    </main>
+    </main >
   )
 }
 
