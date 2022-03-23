@@ -1,30 +1,20 @@
 import { useLazyQuery } from '@apollo/client'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../components/Auth/useAuth'
 import { LOGIN } from './typeDefs'
 
 function Login() {
 
   const navigate = useNavigate()
 
+  const { handleLogin } = useAuth();
+
   const [login, { called, loading }] = useLazyQuery(LOGIN, {
     notifyOnNetworkStatusChange: true,
     onCompleted(data) {
-      // const handler = async () => {
-      //   await window.localStorage.setItem('token', data.login.access_token)
-      //   await window.localStorage.setItem('userId', data.login._id)
-      //   // TODO : FIXME: sometimes failed ? -- use breakpoint
-      //   await navigate({
-      //     pathname: "/"
-      //   })
-      //   console.log("Nagigate after logged in...")
-      // }
-      // handler()
 
-      window.localStorage.setItem('token', data.login.access_token)
-      window.localStorage.setItem('userId', data.login._id)
-      // TODO : FIXME: sometimes failed ? -- use breakpoint
-      // FIXME: after Refresh, login fialed redirect. Problem might form App.tsx Route logic
+      handleLogin(data.login.access_token, data.login._id)
       navigate({
         pathname: "/"
       })
@@ -41,7 +31,7 @@ function Login() {
     initialValues,
     onSubmit: (values) => {
       login({
-        variables: { input: { ...values }}
+        variables: { input: { ...values } }
       })
     }
   })

@@ -6,6 +6,7 @@ import './global.scss'
 import { ApolloProvider } from '@apollo/client';
 import client from './graphql/apolloClient'
 import Login from './pages/Auth/Login';
+import { useAuth } from './components/Auth/useAuth';
 
 
 
@@ -13,45 +14,46 @@ import Login from './pages/Auth/Login';
 function App() {
 
   const routeList = mapRoutes()
+  const { getStoredToken } = useAuth();
 
   return (
     <>
       <ApolloProvider client={client}>
-        <Router>
-          <Routes>
+          <Router>
+            <Routes>
 
-            <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login />} />
 
-            <Route path="/register" element={<div>Todo</div>} />
+              <Route path="/register" element={<div>Todo</div>} />
 
-            {
-              window.localStorage.getItem('token')
-                ? <Route path="/" element={<Layouts />}>
-                  {routeList.map(route => {
-                    const AsyncComponent = loadable(
-                      () => import(`./containers/${route.component}`),
-                      { fallback: <h1>Loading</h1> }
-                    )
+              {
+                getStoredToken()
+                  ? <Route path="/" element={<Layouts />}>
+                    {routeList.map(route => {
+                      const AsyncComponent = loadable(
+                        () => import(`./containers/${route.component}`),
+                        { fallback: <h1>Loading</h1> }
+                      )
 
-                    return (
-                      <Route
-                        key={route.path}
-                        path={route.path}
-                        element={<AsyncComponent />} />
-                    )
-                  })}
-                </Route>
-                : null
-            }
+                      return (
+                        <Route
+                          key={route.path}
+                          path={route.path}
+                          element={<AsyncComponent />} />
+                      )
+                    })}
+                  </Route>
+                  : null
+              }
 
-            <Route path="*" element={
-              window.localStorage.getItem('token')
-                ? <h1>-----------404 not found</h1>
-                : <Navigate to="/login" />
-            } />
+              <Route path="*" element={
+                getStoredToken()
+                  ? <h1>-----------404 not found</h1>
+                  : <Navigate to="/login" />
+              } />
 
-          </Routes>
-        </Router>
+            </Routes>
+          </Router>
       </ApolloProvider>
     </>
   );

@@ -2,24 +2,24 @@ import { Button, TextField } from '@mui/material'
 import { Logout } from '@mui/icons-material'
 import client from '../../../graphql/apolloClient'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../components/Auth/useAuth';
 
 function Profile() {
 
   const navigate = useNavigate();
+  const { handleLogout } = useAuth();
 
-  const ClearStore = () => {
+  const logout = () => {
     // apollo docs: https://www.apollographql.com/docs/react/networking/authentication/#reset-store-on-logout
     client.resetStore()
 
-    window.localStorage.clear()
+    handleLogout()
+    
     navigate({
       pathname: "/login"
     }, {
       replace: true,
     })
-
-    // TODO: Prevent user go back last page after logout
-    // replace current window.history state ?
   }
 
   return (
@@ -32,7 +32,7 @@ function Profile() {
 
         <Button variant="contained" endIcon={<Logout />}
           sx={{ width: 100, height: 50 }}
-          onClick={ClearStore}
+          onClick={logout}
         >
           Logout
         </Button>
