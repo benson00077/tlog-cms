@@ -8,8 +8,11 @@ import { setContext } from "@apollo/client/link/context";
  *  TODO: HttpLink -> BatchHttpLink
  *  TOOD: err of different NODE_ENV and Authentication like login
  */
-
-const httpLink = new HttpLink({ uri: process.env.REACT_APP_SERVER });
+const serverURI =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_SERVER_PRO
+    : process.env.REACT_APP_SERVER_DEV;
+const httpLink = new HttpLink({ uri: serverURI });
 
 const authLink = setContext((_, { headers }) => {
   const token = window.localStorage.getItem("token");
@@ -29,10 +32,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       );
 
       if (extensions.code === "UNAUTHENTICATED") {
-        alert('Expired session. Please log in again.')
-        window.localStorage.clear()
+        alert("Expired session. Please log in again.");
+        window.localStorage.clear();
         //NOTE: redirect to login page. see https://stackoverflow.com/a/506004/16124226
-        window.location.replace(`/login`) 
+        window.location.replace(`/login`);
       }
     });
   }

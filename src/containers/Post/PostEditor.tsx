@@ -121,6 +121,7 @@ function PostEditor() {
     formik.resetForm();
     
     // TODO: Use localStorage to auto save, and then redirect page
+    // TODO: claen up apollo cache, after you edit a post.
     // navigate({ pathname: "/post" });
   };
 

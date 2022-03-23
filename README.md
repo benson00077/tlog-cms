@@ -4,9 +4,12 @@
 Create `./env.development` as below example: 
 ```bash
 PORT=3002
-REACT_APP_SERVER=http://localhost:3001/graphql # local backend
-REACT_APP_SERVER=https://myDomain/grpahql      # deployed backend
+REACT_APP_SERVER_DEV=http://localhost:3001/graphql # local backend
+REACT_APP_SERVER_PRO=https://myDomain/grpahql      # deployed backend
 ```
+`create-react-app` would handle `NODE_ENV` as below:
+- `npm run build`, `NODE_ENV='production'`
+- `npm run start`, `NODE_ENV='development'`
 
 ## TODO
 - backend post data
