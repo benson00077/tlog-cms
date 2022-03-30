@@ -44,8 +44,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         }
 
         window.localStorage.clear();
-        //NOTE: redirect to login page. see https://stackoverflow.com/a/506004/16124226
-        window.location.replace(`/login`);
+        const loginURI = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL+'/login' : '/login';
+        window.location.replace(loginURI);
       }
     });
   }

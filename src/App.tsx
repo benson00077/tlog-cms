@@ -19,7 +19,7 @@ function App() {
   return (
     <>
       <ApolloProvider client={client}>
-          <Router>
+          <Router basename={process.env.NODE_ENV === 'production' ? process.env.REACT_APP_URL_SUBDIRECTORY : ''}>
             <Routes>
 
               <Route path="/login" element={<Login />} />
