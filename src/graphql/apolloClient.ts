@@ -12,6 +12,7 @@ const serverURI =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_SERVER_PRO
     : process.env.REACT_APP_SERVER_DEV;
+if(!serverURI) throw new Error('❌ Please define REACT_APP_SERVER_PRO or REACT_APP_SERVER_DEV in .env file') 
 const httpLink = new HttpLink({ uri: serverURI });
 
 const authLink = setContext((_, { headers }) => {
