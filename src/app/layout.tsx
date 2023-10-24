@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className='dark'>
+      <body className='bg-gray-50 dark:bg-gray-900'>
         <MyMultiLevelDropdown />
         {children}
       </body>
