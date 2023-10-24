@@ -1,54 +1,36 @@
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Getting Started
 
-# 👉 Description
+First, run the development server:
 
-Tihs project is hosted on VPS by Nginx.
-
-This project is bootstraped by `creat-react-app`.
-
-This project use `material-ui` and scss for css styling. 
-
-This project use `loadable component` as dependency for code splitting on the auth/protected pages.
-
-This project use `react-router-dom` v6 to handle routings and use context API for logic of directing between auth/protected pages & login page.
-
-This project use `Apollo Client` to communicate w/ back-end api server. Authentication is handled by local storage jwt.
-
-
-# 👉 Usage
-Create `./env.development` as below example: 
 ```bash
-# for all env
-PORT=3002
-REACT_APP_SERVER_DEV=http://localhost:3001/graphql # local backend
-REACT_APP_SERVER_PRO=https://myDomain/grpahql      # deployed backend
-
-# for Production env
-PUBLIC_URL=<MyDomainName>/subdirectory    # for bundle static files
-REACT_APP_URL_SUBDIRECTORY=/subdirectory  # for react router
-```
-`create-react-app` would handle `NODE_ENV` as below:
-- `npm run build`, `NODE_ENV='production'`
-- `npm run start`, `NODE_ENV='development'`
-
-Also, for production you sould add npm script `homepage` property, where /subdirectory is same as REACT_APP_URL_SUBDIRECTORY set in .env file.
-```json
-{
-  ...
-  "script": {
-    ...
-  },
-  "homepage": "myDomain.www/subdirectory" 
-}
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Use `npm run buildWithSourceMap` to bundle.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# 👉 TODO
-- backend post data
-  - as-is: _id
-  - to-be: id   (front-end friendly)
-- file / image storage solution
-  - Usage: url for poster img and img inside markdown content
-  - [google drive](https://stackoverflow.com/a/60168351/16124226) as temparary workaround
-  - azure blob
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
