@@ -10,14 +10,22 @@ import { useState } from 'react';
  *  ref: https://github.com/themesberg/flowbite-react/issues/340
  */
 export function MyMultiLevelDropdown() {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   return (
     <>
       {/* drawer init and show */}
       <Sidebar aria-label="Sidebar with multi-level dropdown example"
-        className={`${show ? 'opactiy-1 w-1/6' : 'opacity-0 w-0'} absolute left-0`}>
+        className={`${show ? 'opactiy-1 w-1/6' : 'opacity-0 w-0'} absolute left-0 z-20`}>
         <Sidebar.Items>
           <Sidebar.ItemGroup>
+            <Sidebar.Item
+              href="#"
+              icon={HiChartPie}
+            >
+              <p>
+                Posts
+              </p>
+            </Sidebar.Item>
             <Sidebar.Item
               href="#"
               icon={HiChartPie}
@@ -86,10 +94,18 @@ export function MyMultiLevelDropdown() {
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
-      <Button outline className='absolute left-2 bottom-2' 
+      {/* <Button /> z-index is buggy */}
+      {/* <Button outline className='absolute left-2 bottom-2 z-30' 
         onClick={() => setShow(!show)}>
         <GiCardboardBox size={24} />
-      </Button>
+      </Button> */}
+      <button className="z-30 absolute left-2 bottom-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation"
+        onClick={() => setShow(!show)}>
+        {show
+          ? <GiCardboardBox size={24} />
+          : <GiCardboardBoxClosed size={24} />}
+      </button>
     </>
   )
 }

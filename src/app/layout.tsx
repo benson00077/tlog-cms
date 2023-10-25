@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { MyMultiLevelDropdown } from './Sidebar'
 
@@ -15,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" className='dark'>
       <body className='bg-gray-50 dark:bg-gray-900'>
-        <MyMultiLevelDropdown />
+        <MyMultiLevelDropdown/>
         {children}
       </body>
     </html>
