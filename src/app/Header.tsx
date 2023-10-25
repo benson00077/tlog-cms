@@ -18,7 +18,7 @@ function Header() {
           Projects
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          Flowbite React
+          Posts
         </Breadcrumb.Item>
       </Breadcrumb>
   )
