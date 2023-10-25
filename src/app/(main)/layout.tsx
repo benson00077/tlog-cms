@@ -1,9 +1,7 @@
-import type { Metadata } from 'next'
+"use client"
 import { MyMultiLevelDropdown } from '../_components/Sidebar'
-
-export const metadata: Metadata = {
-  title: "CMS for Benson's blog",
-}
+import { ApolloProvider } from '@apollo/client'
+import client from './_lib/client'
 
 export default function RootLayout({
   children,
@@ -12,8 +10,10 @@ export default function RootLayout({
 }) {
   return (
     <>
+    <ApolloProvider client={client}>
       <MyMultiLevelDropdown />
       {children}
+    </ApolloProvider>
     </>
   )
 }

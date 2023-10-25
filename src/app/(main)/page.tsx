@@ -1,7 +1,6 @@
 "use client"
 
-import { gql } from "@apollo/client"
-// import { getClient } from "../_lib/client"
+import { gql, useLazyQuery } from "@apollo/client"
 import { User } from '../_lib/types'
 import { FormEvent } from "react"
 
@@ -23,19 +22,22 @@ const loginQuery = gql`
 `
 
 export default function Login() {
-  const login = async (email: string, password: string) => {
-    //FIXME: getClient on for Server Component
-    // const { data } = getClient().query<User, loginVar>({query: loginQuery, variables: {email, password}})
-    // return data
-  }
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const [userLogin, { loading, error, data }] = useLazyQuery<User, { email: string, password: string }>(loginQuery, {
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) => {
+      //TODO: redirect + jwt in cookies
+      console.log(data)
+    },
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
     const email = data.get('email') as string;
     const password = data.get('password') as string;
-    const res = await login(email, password)
-    console.log('res', res)
+    userLogin({variables: {email, password}})
   }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <form onSubmit={handleSubmit}>

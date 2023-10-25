@@ -1,6 +1,6 @@
 import { PostsTable } from '@/app/_components/PostsTable';
 import PostTableInfo from '@/app/_components/PostsTableInfo';
-import { getClient } from '@/app/_lib/client';
+import { getClient } from '@/app/demo/_lib/client';
 import { Posts } from '@/app/_lib/types';
 import { gql } from '@apollo/client';
 

@@ -1,4 +1,9 @@
+import { Metadata } from 'next'
 import './globals.css'
+
+export const metadata: Metadata = {
+  title: "CMS for Benson's blog",
+}
 
 export default function RootLayout({
   children,

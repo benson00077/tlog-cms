@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { getClient } from '../_lib/client';
+import { getClient } from './_lib/client';
 import { Posts } from '../_lib/types';
 import PostTableInfo from '../_components/PostsTableInfo';
 import { PostsTable } from '../_components/PostsTable';
