@@ -3,7 +3,7 @@ import React from 'react'
 import { Breadcrumb } from 'flowbite-react'
 import { HiHome } from 'react-icons/hi';
 
-function Header() {
+function PostTableInfo() {
   return (
       <Breadcrumb aria-label="Default breadcrumb example">
         <Breadcrumb.Item
@@ -24,4 +24,4 @@ function Header() {
   )
 }
 
-export default Header
+export default PostTableInfo

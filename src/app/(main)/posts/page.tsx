@@ -1,8 +1,8 @@
+import { PostsTable } from '@/app/_components/PostsTable';
+import PostTableInfo from '@/app/_components/PostsTableInfo';
+import { getClient } from '@/app/_lib/client';
+import { Posts } from '@/app/_lib/types';
 import { gql } from '@apollo/client';
-import Header from './Header'
-import { PostsTable } from './PostsTable'
-import { getClient } from './_lib/client';
-import { Posts } from './_lib/types';
 
 const postsQuery = gql`
   query {
@@ -30,7 +30,7 @@ export default async function Home() {
   return (
     <>
       <section className='p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700'>
-        <Header />
+        <PostTableInfo />
       </section>
       <section>
         <PostsTable posts={data.posts} />

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { Table } from 'flowbite-react'
-import { Posts } from './_lib/types'
+import { Posts } from '../_lib/types'
 
 type Props = {
   posts: Posts

@@ -11,3 +11,12 @@ export type PostItem = {
   _id: string
   prev: PostItem | null
 }
+
+export type User = {
+  _id: string
+  username: string
+  access_token: string
+  role: number
+  createdAt: string
+  updatedAt: string
+}
