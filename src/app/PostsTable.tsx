@@ -1,28 +1,10 @@
-'use client';
+"use client"
+import React from 'react'
+import { Table } from 'flowbite-react'
 
-import { Breadcrumb, Table } from 'flowbite-react';
-import { HiHome } from 'react-icons/hi';
-
-export function PostsList() {
+export function PostsTable() {
   return (
-    <>
-      <Breadcrumb aria-label="Default breadcrumb example">
-        <Breadcrumb.Item
-          href="#"
-          icon={HiHome}
-        >
-          <p>
-            Home
-          </p>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="#">
-          Projects
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          Flowbite React
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Table striped>
+      <Table hoverable>
         <Table.Head>
           <Table.HeadCell>
             Product name
@@ -117,60 +99,7 @@ export function PostsList() {
               </a>
             </Table.Cell>
           </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              <p>
-                Google Pixel Phone
-              </p>
-            </Table.Cell>
-            <Table.Cell>
-              Gray
-            </Table.Cell>
-            <Table.Cell>
-              Phone
-            </Table.Cell>
-            <Table.Cell>
-              $799
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Apple Watch 5
-            </Table.Cell>
-            <Table.Cell>
-              Red
-            </Table.Cell>
-            <Table.Cell>
-              Wearables
-            </Table.Cell>
-            <Table.Cell>
-              $999
-            </Table.Cell>
-            <Table.Cell>
-              <a
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href="/tables"
-              >
-                <p>
-                  Edit
-                </p>
-              </a>
-            </Table.Cell>
-          </Table.Row>
         </Table.Body>
       </Table>
-    </>
   )
 }
-
-

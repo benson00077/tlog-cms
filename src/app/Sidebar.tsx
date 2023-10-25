@@ -1,9 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Button, Sidebar } from 'flowbite-react';
 import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from 'react-icons/hi';
 import { GiCardboardBox, GiCardboardBoxClosed } from 'react-icons/gi'
-import { useState } from 'react';
 
 /**
  *  NOTICE: flowbite-react still work on Drawer component

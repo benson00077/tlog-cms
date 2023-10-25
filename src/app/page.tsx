@@ -1,9 +1,11 @@
-import { PostsList } from './(home)/PostList'
+import Header from './Header'
+import { PostsTable } from './PostsTable'
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main>
-      <PostsList />
-    </main>
+    <>
+      <Header />
+      <PostsTable />
+    </>
   )
 }
