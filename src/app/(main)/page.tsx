@@ -3,6 +3,9 @@
 import { useLazyQuery } from "@apollo/client"
 import { FormEvent } from "react"
 import { gql } from "@/__generated__/gql"
+import { useRouter } from "next/navigation"
+import { Toast } from "flowbite-react"
+import { HiFire } from 'react-icons/hi';
 
 const loginQuery = gql(/* GraphQL */`
   query Login($input: LoginInput!) {
@@ -20,11 +23,14 @@ const loginQuery = gql(/* GraphQL */`
 
 export default function Login() {
   const inputIds = { email: 'email', password: 'password' }
+  const router = useRouter()
   const [userLogin, { loading, error, data }] = useLazyQuery(loginQuery, {
     notifyOnNetworkStatusChange: true,
-    onCompleted: (data) => {
-      //TODO: redirect + jwt in cookies
-      console.log(44, data)
+    onCompleted: ({ login }) => {
+      window.localStorage.setItem('token', login.access_token)
+      //TODO: store for user id
+      window.localStorage.setItem('userId', login._id)
+      router.push("/posts")
     },
   });
 
@@ -53,8 +59,20 @@ export default function Login() {
           </div>
           <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
         </div> */}
-        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">🚀 Let me in !</button>
+        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          {loading ? 'Logging in...' : '🚀 Let me in !'}
+        </button>
       </form>
+      {error && <Toast >
+        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-500 dark:bg-cyan-800 dark:text-cyan-200">
+          <HiFire className="h-5 w-5" />
+        </div>
+        <div className="ml-3 text-sm font-normal">
+          {error.message}
+        </div>
+        <Toast.Toggle />
+      </Toast>}
+
     </main>
   )
 }
