@@ -1,15 +1,11 @@
 import { PostsTable } from '@/app/_components/PostsTable';
 import PostTableInfo from '@/app/_components/PostsTableInfo';
 import { getClient } from '@/app/demo/_lib/client';
-import { Posts } from '@/app/_lib/types';
-import { gql } from '@apollo/client';
+import { gql } from '@/__generated__/gql';
 
-const postsQuery = gql`
-  query {
-    posts (input : {
-      page: 1
-      pageSize: 10
-    }) {
+const postsQuery = gql(/* GraphQL */`
+  query Posts($input: PaginationInput!) {
+    posts(input: $input) {
       total
       page
       pageSize
@@ -22,11 +18,11 @@ const postsQuery = gql`
         }
       }
     }
-  }
-`
+  }   
+`)
 
 export default async function Home() {
-  const { data } = await getClient().query<{ posts: Posts }>({ query: postsQuery });
+  const { data } = await getClient().query({ query: postsQuery, variables: { input: { page: 1, pageSize: 10 } } });
   return (
     <>
       <section className='p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700'>

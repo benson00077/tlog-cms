@@ -1,10 +1,10 @@
 "use client"
 import React from 'react'
 import { Table } from 'flowbite-react'
-import { Posts } from '../_lib/types'
+import { PostsQuery } from '@/__generated__/graphql'
 
 type Props = {
-  posts: Posts
+  posts: PostsQuery['posts']
 }
 export function PostsTable(props: Props) {
   const { posts: { items } } = props

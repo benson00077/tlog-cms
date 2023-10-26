@@ -1,14 +1,10 @@
 "use client"
 
-import { gql, useLazyQuery } from "@apollo/client"
-import { User } from '../_lib/types'
+import { useLazyQuery } from "@apollo/client"
 import { FormEvent } from "react"
+import { gql } from "@/__generated__/gql"
 
-type loginVar = {
-  email: string,
-  password: string
-}
-const loginQuery = gql`
+const loginQuery = gql(/* GraphQL */`
   query Login($input: LoginInput!) {
     login(input: $input) {
       _id
@@ -20,34 +16,36 @@ const loginQuery = gql`
     }
   }
 `
+)
 
 export default function Login() {
-  const [userLogin, { loading, error, data }] = useLazyQuery<User, { email: string, password: string }>(loginQuery, {
+  const inputIds = { email: 'email', password: 'password' }
+  const [userLogin, { loading, error, data }] = useLazyQuery(loginQuery, {
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
       //TODO: redirect + jwt in cookies
-      console.log(data)
+      console.log(44, data)
     },
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const email = data.get('email') as string;
-    const password = data.get('password') as string;
-    userLogin({variables: {email, password}})
+    const email = data.get(inputIds.email) as string;
+    const password = data.get(inputIds.password) as string;
+    userLogin({ variables: { input: { email, password } } })
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
-          <label htmlFor="userCode" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your id</label>
-          <input id="userCode" name="userCode" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" pattern="[A-Za-z0-9]{1,20}" placeholder="ironman@email.com" required />
+          <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your id</label>
+          <input id={inputIds.email} type="email" name="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ironman@email.com" required />
         </div>
         <div className="mb-6">
           <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-          <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+          <input type={inputIds.password} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
         </div>
         {/* <div className="flex items-start mb-6">
           <div className="flex items-center h-5">
