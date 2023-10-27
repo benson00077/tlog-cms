@@ -4,21 +4,31 @@ import { getClient } from '@/app/demo/_lib/client';
 import { gql } from '@/__generated__/gql';
 
 const postsQuery = gql(/* GraphQL */`
-  query Posts($input: PaginationInput!) {
-    posts(input: $input) {
+  query GetPosts($input: PaginationInput!) {
+    getPosts(input: $input) {
       total
       page
       pageSize
       items {
-        title
         _id
+        posterUrl
+        title
+        summary
+        content
+        tags
+        lastModifiedDate
+        isPublic
+        createdAt
+        updatedAt
         prev {
-          title
+          _id
+        }
+        next {
           _id
         }
       }
-    }
-  }   
+    } 
+  }
 `)
 
 export default async function Home() {
@@ -29,7 +39,7 @@ export default async function Home() {
         <PostTableInfo />
       </section>
       <section>
-        <PostsTable posts={data.posts} />
+        <PostsTable posts={data.getPosts} />
       </section>
     </>
   )

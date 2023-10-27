@@ -1,10 +1,11 @@
 "use client"
 import React from 'react'
 import { Table } from 'flowbite-react'
-import { PostsQuery } from '@/__generated__/graphql'
+import { GetPostsQuery, PostsQuery } from '@/__generated__/graphql'
+import Link from 'next/link'
 
 type Props = {
-  posts: PostsQuery['posts']
+  posts: PostsQuery['posts'] | GetPostsQuery['getPosts']
 }
 export function PostsTable(props: Props) {
   const { posts: { items } } = props
@@ -49,12 +50,12 @@ export function PostsTable(props: Props) {
                 }
               </Table.Cell>
               <Table.Cell>
-                <a
+                <Link
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  href="/tables"
+                  href={`/${item._id}`}
                 >
                   <p>Edit</p>
-                </a>
+                </Link>
               </Table.Cell>
             </Table.Row>
           )
