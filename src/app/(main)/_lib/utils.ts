@@ -37,7 +37,7 @@ const fetchJwt = async ({ email, password }: { email: string, password: string }
     return jsn.data.login.access_token as string
   } catch (err) {
     console.warn(err)
-    throw new Error(err as string)
+    throw new Error('Is your backend app working ?')
   }
 }
 
