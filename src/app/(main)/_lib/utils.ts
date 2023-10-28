@@ -50,3 +50,12 @@ export function jwtRetrive() {
 export async function jwtLogin(email: string, password: string) {
   return await fetchJwt({ email, password })
 }
+
+/**
+ * Usage: RSC first render on server, use pre-defined user to render. 
+ * NOTICE: It means there would be buggy when different user have different pages.
+ */
+export async function jwtSsr() {
+  if (!SsrUser.email || !SsrUser.password) throw new Error('❌ Please provide process.env.SSR_USER_EMAIL && process.env.SSR_USER_PWD in .env.development or .env.production.')
+  return await fetchJwt({ email: SsrUser.email, password: SsrUser.password})
+}

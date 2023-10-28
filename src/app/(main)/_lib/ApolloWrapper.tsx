@@ -7,10 +7,14 @@ import { makeClientWithRef } from "./client";
 import { useRef } from "react";
 import { useAuth } from "./AuthWrapper";
 
-export function ApolloWrapper({ children }: React.PropsWithChildren) {
+export function ApolloWrapper({ children, jwtOnSsr }: React.PropsWithChildren<{
+  jwtOnSsr: string
+}>) {
   const { jwt, setJwt } = useAuth()
   const jwtRef = useRef('');
-  jwtRef.current = jwt
+  jwtRef.current = typeof window === 'undefined'
+    ? jwtOnSsr
+    : jwt
 
   return (
     <ApolloNextAppProvider makeClient={() => makeClientWithRef(jwtRef)}>
