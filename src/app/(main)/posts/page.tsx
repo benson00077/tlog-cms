@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import PostList from "./PostList"
 import PostTableInfo from "@/app/_components/PostsTableInfo"
 import { PostsTable } from "@/app/_components/PostsTable"
+import { Post } from "@/__generated__/graphql"
 
 export default function Home() {
   return (
@@ -11,13 +12,25 @@ export default function Home() {
       </section>
       <section >
         <Suspense fallback={<PostsTable posts={{
+          total: '11',
+          page: 1,
+          pageSize: 10,
           items: [...new Array(10).fill(null)].map((_, i) => {
             return {
               _id: '' + i,
-              title: "...Loading..."
+              title: "...Loading...",
+              summary: "...Summary...",
+              content: '',
+              posterUrl: '',
+              tags: ['...Loading...'],
+              lastModifiedDate: '',
+              isPublic: true,
+              createdAt: '',
+              updatedAt: ''
             }
           })
         }} />}>
+        {/* <Suspense fallback={<PostsTable posts={} />}> */}
           <PostList />
         </Suspense>
       </section>

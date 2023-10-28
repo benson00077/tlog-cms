@@ -1,14 +1,12 @@
 "use client"
 import React from 'react'
 import { Table } from 'flowbite-react'
-import { GetPostsQuery, Post, PostsQuery } from '@/__generated__/graphql'
+import { GetPostsQuery } from '@/__generated__/graphql'
 import Link from 'next/link'
+import Image from 'next/image'
 
-type PostsPreveiw = {
-  items: Pick<Post, "title" | "_id" >[]
-}
 type Props = {
-  posts: PostsQuery['posts'] | GetPostsQuery['getPosts'] | PostsPreveiw
+  posts: GetPostsQuery['getPosts']
 }
 export function PostsTable(props: Props) {
   const { posts: { items } } = props
@@ -19,10 +17,10 @@ export function PostsTable(props: Props) {
           Title
         </Table.HeadCell>
         <Table.HeadCell>
-          Color
+          Poster
         </Table.HeadCell>
         <Table.HeadCell>
-          Category
+          Tags
         </Table.HeadCell>
         <Table.HeadCell>
           Status
@@ -41,24 +39,35 @@ export function PostsTable(props: Props) {
                 {item.title}
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {item._id}
+                <Image alt={item.title} width={50} height={50} src={item.posterUrl} />
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                Laptop
+                {item.tags.map((tag) => {
+                  return (
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                      {tag}
+                    </span>
+                  )
+                })}
               </Table.Cell>
               <Table.Cell>
-                {i % 4 === 0
+                {/* {i % 4 === 0
                   ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-red-500 mr-2'></div> draft </div>
                   : <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
+                } */}
+                {
+                  item.isPublic
+                    ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
+                    : <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-red-400 mr-2'></div> draft </div>
                 }
               </Table.Cell>
               <Table.Cell>
-                <Link
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  href={`/${item._id}`}
-                >
-                  <p>Edit</p>
-                </Link>
+                <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                  <Link href={`/${item._id}`}>
+                    <p>Edit</p>
+                  </Link>
+                </button>
+
               </Table.Cell>
             </Table.Row>
           )

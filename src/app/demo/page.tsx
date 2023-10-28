@@ -10,10 +10,20 @@ const postsQuery = gql(/* GraphQL */`
       page
       pageSize
       items {
-        title
         _id
+        posterUrl
+        title
+        summary
+        content
+        tags
+        lastModifiedDate
+        isPublic
+        createdAt
+        updatedAt
         prev {
-          title
+          _id
+        }
+        next {
           _id
         }
       }
