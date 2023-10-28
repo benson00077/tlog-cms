@@ -59,3 +59,22 @@ export async function jwtSsr() {
   if (!SsrUser.email || !SsrUser.password) throw new Error('❌ Please provide process.env.SSR_USER_EMAIL && process.env.SSR_USER_PWD in .env.development or .env.production.')
   return await fetchJwt({ email: SsrUser.email, password: SsrUser.password})
 }
+
+
+
+export function timeStampFilter(timestamp: string) {
+  // const timestamp = "2022-03-30T06:09:27.615Z";
+  const date = new Date(timestamp);
+  
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short',
+  };
+  const formattedDate = date.toLocaleDateString('zh-TW', options);
+  return formattedDate
+}
