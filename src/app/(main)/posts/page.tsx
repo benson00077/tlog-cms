@@ -2,7 +2,6 @@ import { Suspense } from "react"
 import PostList from "./PostList"
 import PostTableInfo from "@/app/_components/PostsTableInfo"
 import { PostsTable } from "@/app/_components/PostsTable"
-import { Post } from "@/__generated__/graphql"
 
 export default function Home() {
   return (

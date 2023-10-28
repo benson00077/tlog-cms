@@ -44,17 +44,14 @@ export function PostsTable(props: Props) {
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {item.tags.map((tag) => {
                   return (
-                    <span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                    <span key={tag}
+                      className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                       {tag}
                     </span>
                   )
                 })}
               </Table.Cell>
               <Table.Cell>
-                {/* {i % 4 === 0
-                  ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-red-500 mr-2'></div> draft </div>
-                  : <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
-                } */}
                 {
                   item.isPublic
                     ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
