@@ -1,44 +1,14 @@
-import { ApolloClient, ApolloLink, from, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloLink, HttpLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { setContext } from "@apollo/client/link/context";
 import {
   NextSSRInMemoryCache,
   NextSSRApolloClient,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { redirect } from "next/navigation";
+import { MutableRefObject } from "react";
 
-/**
- *  Apollo Link overview: https://www.apollographql.com/docs/react/api/link/introduction/
- *  Apollo client authentication: https://www.apollographql.com/docs/react/networking/authentication/
- *  TODO: HttpLink -> BatchHttpLink
- *  TOOD: err of different NODE_ENV and Authentication like login
- */
 const serverURI = process.env.NEXT_PUBLIC_API_GQL_URL
-if (!serverURI) throw new Error('❌ Please provide NEXT_PUBLIC_API_GQL_URL .env.development or .env.production.')
-const httpLink = new HttpLink({
-  uri: serverURI,
-  // you can disable result caching here if you want to
-  // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
-  fetchOptions: { cache: "no-store" },
-  // you can override the default `fetchOptions` on a per query basis
-  // via the `context` property on the options passed as a second argument
-  // to an Apollo Client data fetching hook, e.g.:
-  // const { data } = useSuspenseQuery(MY_QUERY, { context: { fetchOptions: { cache: "force-cache" }}});
-});
-
-/** @deprecated */
-const authLink = setContext((_, { headers }) => {
-  //FIXME: this is not gonna work in SSR, should login and get jwt to pass into ApolloWrapper
-  //TODO:  also, define it in HttpLink?
-  //TODO: or just use purly client-side solution, since they're still discussing, ref: https://github.com/apollographql/apollo-client/pull/11275
-  const token = window.localStorage.getItem("token");
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-});
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -52,16 +22,18 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         console.log(message) // === 'Unauthorized' when expired
 
         // NOTICE: message is defined in back end logic
-        if (message === 'Unauthroized') {
-          alert("Expired session. Please log in again")
+        if (message === 'Unauthorized') {
+          console.error("Expired session. Please log in again")
         } else {
           // e.g. wrong pwd 
-          alert(message)
+          console.error(message)
         }
 
-        window.localStorage.clear();
-        const loginURI = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL + '/login' : '/login';
-        window.location.replace(loginURI);
+        if (typeof window !== 'undefined') {
+          window.localStorage.clear();
+        }
+        const loginURI = '/'
+        redirect(loginURI)
       }
     });
   }
@@ -69,8 +41,40 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 
-/** ref: https://github.com/apollographql/apollo-client-nextjs#readme */
-export function makeClient() {
+/**
+ *  Docs: https://github.com/apollographql/apollo-client-nextjs#readme
+ * 
+ *  NOTICE: still hacky. 
+ *  ref: https://github.com/apollographql/apollo-client-nextjs/issues/103
+ *  ref: https://github.com/apollographql/apollo-client-nextjs/issues/21
+ *  ref: https://github.com/apollographql/apollo-client/pull/11275
+ *  ref: https://github.com/apollographql/apollo-client-nextjs/pull/9
+ *  ref: https://stackoverflow.com/questions/77188256/proper-way-to-store-a-token-retrieved-client-side-in-nextjs-13-app-router-vers
+ */
+export function makeClientWithRef(ref: MutableRefObject<string>) {
+  // if you access `ref.current` from your `Link` here it will always be up to date with your React component.
+  // \_ ref: https://github.com/apollographql/apollo-client-nextjs/issues/103#issuecomment-1741166043
+
+  const httpLink = new HttpLink({
+    uri: serverURI,
+    fetchOptions: { cache: "no-store" },
+  });
+
+  const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers = {} }) => {
+      const jwt = ref.current
+      return {
+        headers: {
+          ...headers,
+          authorization: `Bearer ${jwt}`,
+        },
+      }
+    })
+    return forward(operation)
+  })
+
+  // const links = [errorLink, authLink, httpLink]
+
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(), // not the normal `InMemoryCache`
     link:
@@ -89,14 +93,3 @@ export function makeClient() {
         : ApolloLink.from([errorLink, authLink, httpLink]),
   })
 }
-
-
-/**
- *  @deprecated since using Next.js app router, each Client Component will be SSR-rendered for the initial request. 
- */
-const client = new ApolloClient({
-  link: from([errorLink, authLink, httpLink]), // provide a link chain to ApolloClient
-  cache: new InMemoryCache(),
-});
-
-export default client;

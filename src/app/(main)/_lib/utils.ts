@@ -1,0 +1,52 @@
+
+const serverURI = process.env.NEXT_PUBLIC_API_GQL_URL
+const SsrUser = {
+  email: process.env.SSR_USER_EMAIL,
+  password: process.env.SSR_USER_PWD
+}
+
+if (!serverURI) throw new Error('❌ Please provide NEXT_PUBLIC_API_GQL_URL .env.development or .env.production.')
+
+const loginQuery = `
+    query Login($input: LoginInput!) {
+      login(input: $input) {
+        _id
+        username
+        access_token
+        role
+        createdAt
+        updatedAt
+      }
+    }
+  `
+
+const fetchJwt = async ({ email, password }: { email: string, password: string }) => {
+  try {
+    const res = await fetch(serverURI!, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: loginQuery,
+        variables: {
+          input: { email, password }
+        }
+      })
+    })
+    const jsn = await res.json()
+    if (jsn.errors) throw new Error(jsn.errors[0].message)
+    return jsn.data.login.access_token as string
+  } catch (err) {
+    console.warn(err)
+    throw new Error(err as string)
+  }
+}
+
+export function jwtRetrive() {
+  const token = window.localStorage.getItem('token')
+  if (!token) throw new Error('No token in localStorage')
+  return token
+}
+
+export async function jwtLogin(email: string, password: string) {
+  return await fetchJwt({ email, password })
+}
