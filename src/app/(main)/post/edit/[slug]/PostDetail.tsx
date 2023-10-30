@@ -3,10 +3,9 @@ import { gql } from '@/__generated__/gql'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { Button, Label, Select, TextInput, Textarea } from 'flowbite-react'
 import React, { FormEvent } from 'react'
-import { timeStampFilter } from '@/app/(main)/_lib/utils'
 import { useMutation } from '@apollo/client'
 import { redirect } from 'next/navigation'
-import { formDataToObject, getDirtyFlds, pruneProperties } from './utils'
+import { timeStampFilter, formDataToObject, getDirtyFlds, pruneProperties } from './utils'
 
 const getPostByIdQuery = gql(/* GraphQL */`
   query GetPostById($input: ID!) {
