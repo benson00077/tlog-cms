@@ -60,7 +60,7 @@ export function PostsTable(props: Props) {
               </Table.Cell>
               <Table.Cell>
                 <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                  <Link href={`/${item._id}`}>
+                  <Link href={`/post/edit/${item._id}`}>
                     <p>Edit</p>
                   </Link>
                 </button>
