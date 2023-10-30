@@ -113,8 +113,8 @@ function PostDetail({ postId }: Prpos) {
         }
       }
     })
-    const postDetailURL = '/posts'
-    redirect(postDetailURL)
+    const postDetailRoute = '/posts'
+    window.location.replace(window.location.origin + postDetailRoute)
   }
 
   return (

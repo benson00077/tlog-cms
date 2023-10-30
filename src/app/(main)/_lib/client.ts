@@ -5,7 +5,6 @@ import {
   NextSSRApolloClient,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-import { redirect } from "next/navigation";
 import { MutableRefObject } from "react";
 
 const serverURI = process.env.NEXT_PUBLIC_API_GQL_URL
@@ -31,9 +30,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
         if (typeof window !== 'undefined') {
           window.localStorage.clear();
+          //FIXME: flikering error.tsx before back to login page. Caused by client component PostDetail's first render on server...
+          const loginRoute = '/'
+          window.location.replace(window.location.origin + loginRoute)
         }
-        const loginURI = '/'
-        redirect(loginURI)
       }
     });
   }
