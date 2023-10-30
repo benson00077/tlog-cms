@@ -4,6 +4,9 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { Button, Label, Select, TextInput, Textarea } from 'flowbite-react'
 import React, { FormEvent } from 'react'
 import { timeStampFilter } from '@/app/(main)/_lib/utils'
+import { useMutation } from '@apollo/client'
+import { redirect } from 'next/navigation'
+import { formDataToObject, getDirtyFlds, pruneProperties } from './utils'
 
 const getPostByIdQuery = gql(/* GraphQL */`
   query GetPostById($input: ID!) {
@@ -26,6 +29,29 @@ const getPostByIdQuery = gql(/* GraphQL */`
 `
 )
 
+const updatePostById = gql(/* GraphQL */`
+  mutation UpdatePostById($input: UpdatePostInput!) {
+    updatePostById(input: $input) {
+      _id
+      title
+      summary
+      tags
+      content
+      posterUrl
+      createdAt
+      updatedAt
+      lastModifiedDate
+      isPublic
+      like
+      pv
+      prev {
+        title
+        _id
+      }
+    }
+  }
+`)
+
 const inputFlds = {
   title: 'title',
   tags: 'tags',
@@ -45,6 +71,7 @@ const selectFlds = {
   },
 }
 
+/** Not register them on input cause readOnly */
 const timeFlds = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -59,19 +86,36 @@ function PostDetail({ postId }: Prpos) {
     variables: { input: postId }
   })
   const post = data.getPostById
+  const [updatePost, mutationResult] = useMutation(updatePostById)
 
   const handleSumbit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    const fTitle = formData.get(inputFlds.title)
-    const fTags = formData.get(inputFlds.tags)
-    const fSummary = formData.get(textAreaFlds.summary)
-    const fContent = formData.get(textAreaFlds.content)
-    const fPosterUrl = formData.get(textAreaFlds.posterUrl)
-    const fCreatedAt = post.createdAt
-    const fUpdatedAt = post.updatedAt
+    const fTags = (formData.get(inputFlds.tags) as string).split(',')
     const fIsPublic = formData.get(selectFlds.isPublic.name) === selectFlds.isPublic.option1
-    console.log(Array.from(formData))
+
+    const updatedFormObj = formDataToObject(formData)
+    const prunedPost = pruneProperties(post, ['tags', 'isPublic', 'createdAt', 'updatedAt'])
+    const prunedFormObj = pruneProperties(updatedFormObj, ['tags', 'isPublic'])
+    const changes = getDirtyFlds<typeof prunedPost>(prunedPost, prunedFormObj)
+
+    /** Just udpate tags and isPublic even no actual changes because I'm too lazy to do diff */
+    const input = {
+      ...changes,
+      tags: fTags,
+      isPublic: fIsPublic
+    }
+
+    updatePost({
+      variables: {
+        input: {
+          id: post._id,
+          ...input
+        }
+      }
+    })
+    const postDetailURL = '/posts'
+    redirect(postDetailURL)
   }
 
   return (
@@ -88,8 +132,7 @@ function PostDetail({ postId }: Prpos) {
                 />
               </div>
               <TextInput
-                //@ts-ignore
-                defaultValue={post[val]}
+                defaultValue={post[val as keyof typeof inputFlds]}
                 id={val}
                 name={val}
                 sizing="md"
@@ -166,7 +209,6 @@ function PostDetail({ postId }: Prpos) {
               <TextInput
                 readOnly
                 id={val}
-                name={val}
                 sizing="md"
                 //@ts-ignore
                 placeholder={timeStampFilter(post[val])}

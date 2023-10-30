@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetPostById($input: ID!) {\n    getPostById(id: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      isPublic\n      prev {\n        title\n        _id\n      }\n    } \n  }\n": types.GetPostByIdDocument,
+    "\n  mutation UpdatePostById($input: UpdatePostInput!) {\n    updatePostById(input: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      lastModifiedDate\n      isPublic\n      like\n      pv\n      prev {\n        title\n        _id\n      }\n    }\n  }\n": types.UpdatePostByIdDocument,
     "\n  query GetPosts($input: PaginationInput!) {\n    getPosts(input: $input) {\n      total\n      page\n      pageSize\n      items {\n        _id\n        posterUrl\n        title\n        summary\n        content\n        tags\n        lastModifiedDate\n        isPublic\n        createdAt\n        updatedAt\n        prev {\n          _id\n        }\n        next {\n          _id\n        }\n      }\n    } \n  }\n": types.GetPostsDocument,
     "\n  query Posts($input: PaginationInput!) {\n    posts(input: $input) {\n      total\n      page\n      pageSize\n      items {\n        _id\n        posterUrl\n        title\n        summary\n        content\n        tags\n        lastModifiedDate\n        isPublic\n        createdAt\n        updatedAt\n        prev {\n          _id\n        }\n        next {\n          _id\n        }\n      }\n    }\n  }   \n": types.PostsDocument,
 };
@@ -36,6 +37,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetPostById($input: ID!) {\n    getPostById(id: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      isPublic\n      prev {\n        title\n        _id\n      }\n    } \n  }\n"): (typeof documents)["\n  query GetPostById($input: ID!) {\n    getPostById(id: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      isPublic\n      prev {\n        title\n        _id\n      }\n    } \n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdatePostById($input: UpdatePostInput!) {\n    updatePostById(input: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      lastModifiedDate\n      isPublic\n      like\n      pv\n      prev {\n        title\n        _id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdatePostById($input: UpdatePostInput!) {\n    updatePostById(input: $input) {\n      _id\n      title\n      summary\n      tags\n      content\n      posterUrl\n      createdAt\n      updatedAt\n      lastModifiedDate\n      isPublic\n      like\n      pv\n      prev {\n        title\n        _id\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
