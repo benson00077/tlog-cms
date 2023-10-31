@@ -1,3 +1,5 @@
+import { Post } from "@/__generated__/graphql"
+
 const serverURI = process.env.NEXT_PUBLIC_API_GQL_URL
 const SsrUser = {
   email: process.env.SSR_USER_EMAIL,
@@ -18,6 +20,38 @@ const loginQuery = `
       }
     }
   `
+const postsQuery = `
+  query Posts($input: PaginationInput!) {
+    posts(input: $input) {
+      items {
+        _id
+      }
+    } 
+  }
+`
+
+export async function fetchPostsSlugs(page: number, pageSize: number) {
+  try {
+    const res = await fetch(serverURI!, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: postsQuery,
+        variables: {
+          input: { page, pageSize }
+        }
+      })
+    })
+    const jsn = await res.json()
+    if (jsn.errors) throw new Error(jsn.errors[0].message)
+    const postItems = jsn.data.posts.items as Post[]
+    console.log('>>', postItems) // log while npm run build
+    return postItems.map((post) => post._id)
+  } catch (err) {
+    console.warn(err)
+    throw new Error('Failed to fetch Post Ids as slugs. Is your backend app working ?')
+  }
+}
 
 const fetchJwt = async ({ email, password }: { email: string, password: string }) => {
   try {
