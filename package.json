@@ -2,6 +2,9 @@
   "name": "tlog-cms",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "21.1.0"
+  },
   "scripts": {
     "pre": "npm run compile",
     "dev": "next dev",
@@ -16,7 +19,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.4.3",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.6.4",
-    "next": "13.5.6",
+    "next": "^14.0.1",
     "react": "^18",
     "react-dom": "^18"
   },
