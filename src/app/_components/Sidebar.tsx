@@ -1,21 +1,23 @@
 'use client';
 
-import { useState } from 'react';
 import { Button, Sidebar } from 'flowbite-react';
 import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from 'react-icons/hi';
-import { GiCardboardBox, GiCardboardBoxClosed } from 'react-icons/gi'
+import { FaChevronLeft } from 'react-icons/fa'
 
+type Props = {
+  show: boolean
+  togglerOnClick: (val: boolean) => void
+}
 /**
  *  NOTICE: flowbite-react still work on Drawer component
  *  ref: https://github.com/themesberg/flowbite-react/issues/340
  */
-export function MyMultiLevelDropdown() {
-  const [show, setShow] = useState(false);
+export function MyMultiLevelDropdown({ show, togglerOnClick }: Props) {
   return (
-    <>
+    <div className='absoltue left-0'>
       {/* drawer init and show */}
       <Sidebar aria-label="Sidebar with multi-level dropdown example"
-        className={`${show ? 'opactiy-1 w-1/6' : 'opacity-0 w-0'} absolute left-0 z-20`}>
+        className={`fixed left-0 inset-y-0 z-20 ${show ? 'opacity-100' : 'opacity-0 -translate-x-80'} transition-all pl-8`}>
         <Sidebar.Items>
           <Sidebar.ItemGroup>
             <Sidebar.Item
@@ -99,15 +101,26 @@ export function MyMultiLevelDropdown() {
         onClick={() => setShow(!show)}>
         <GiCardboardBox size={24} />
       </Button> */}
-      <button className="z-30 absolute left-2 bottom-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation"
-        onClick={() => setShow(!show)}>
-        {show
-          ? <GiCardboardBox size={24} />
-          : <GiCardboardBoxClosed size={24} />}
+
+      <button
+        onClick={() => togglerOnClick(!show)}
+        // className="fixed left-0 top-26 z-30 flex items-center justify-center bg-blue-500 text-white p-2 rounded-md"
+        className="flex fixed left-0 inset-y-0 z-30 items-center justify-center bg-slate-400/30 text-white p-2 rounded-md"
+      >
+        <FaChevronLeft size={16} className={`${show ? '' : 'rotate-180'} transition-all`} />
       </button>
-    </>
+
+      <MyBackdrop show={show} togglerOnClick={togglerOnClick} />
+    </div>
   )
 }
 
-
+function MyBackdrop({ show, togglerOnClick }: Props) {
+  return <>
+    {show && (
+      <div
+        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10 flex justify-center items-center"
+        onClick={() => togglerOnClick(false)}></div>
+    )}
+  </>
+}
