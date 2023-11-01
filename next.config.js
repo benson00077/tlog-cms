@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  //FIXME: currently buggy, wait for enhancement
+  // \_ ref: https://github.com/vercel/next.js/issues/54393
+  //  \_ or my guess is that somewhere in your page component, you're throwing an uncaught error for the invalid slug.
   output: 'export',
   images: {
+    unoptimized: true, // for static export
     remotePatterns: [
       {
         protocol: 'https',

@@ -11,10 +11,13 @@ export async function generateStaticParams() {
   const ids = await fetchPostsSlugs(1, 10)
 
   //FIXME: `npm run build` would somehow send { slug: `[slug]` } or { slug: %5Bslug%5D } down to Page and make apollo call api.
-  //Error: Error occurred prerendering page "/post/edit/[slug]".
+  //Error on static export build: Error occurred prerendering page "/post/edit/[slug]".
   // ref: https://github.com/vercel/next.js/issues/45220
   // ref: https://github.com/vercel/next.js/discussions/53893
   // ref: https://github.com/vercel/next.js/issues/46098
+  //Error on static export dev  : Error: Page "/(main)/post/edit/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+  // ref: https://github.com/vercel/next.js/issues/54393
+  //  \__ workaround: https://github.com/vercel/next.js/issues/48022#issuecomment-1517432608
   return ids.map((id) => ({
     slug: id,
   }))
