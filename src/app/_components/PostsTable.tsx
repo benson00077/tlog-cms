@@ -1,17 +1,24 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { Table } from 'flowbite-react'
 import { GetPostsQuery } from '@/__generated__/graphql'
 import Link from 'next/link'
 import Image from 'next/image'
+import { MdEdit, MdUpload } from 'react-icons/md'
+import { BiSolidToggleRight, BiSolidToggleLeft } from 'react-icons/bi'
+import { useDynamicRecord } from '../_hooks/useDynamicRecord'
 
 type Props = {
   posts: GetPostsQuery['getPosts']
 }
 export function PostsTable(props: Props) {
   const { posts: { items } } = props
+  const [isColStatusEdit, setIsColStatusEdit] = useState(false)
+  const { map, set, del, fromMaptoArray } = useDynamicRecord<Partial<typeof items[0]>>()
+  console.log(fromMaptoArray(map))
   return (
     <Table hoverable>
+
       <Table.Head>
         <Table.HeadCell>
           Title
@@ -22,8 +29,17 @@ export function PostsTable(props: Props) {
         <Table.HeadCell>
           Tags
         </Table.HeadCell>
-        <Table.HeadCell>
+        <Table.HeadCell
+          onClick={() => setIsColStatusEdit(!isColStatusEdit)}
+          className='cursor-pointer group relative hover:text-purple-400 select-none'>
           Status
+          <span className='inline-block ml-2'>
+            {
+              isColStatusEdit
+                ? <MdUpload size={18} />
+                : <MdEdit size={18} />
+            }
+          </span>
         </Table.HeadCell>
         <Table.HeadCell>
           <span className="sr-only">
@@ -31,6 +47,7 @@ export function PostsTable(props: Props) {
           </span>
         </Table.HeadCell>
       </Table.Head>
+
       <Table.Body className="divide-y">
         {items.map((item, i) => {
           return (
@@ -51,25 +68,51 @@ export function PostsTable(props: Props) {
                   )
                 })}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className='px-2'>
                 {
-                  item.isPublic
-                    ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
-                    : <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-red-400 mr-2'></div> draft </div>
+                  isColStatusEdit
+                    ? <IsPublicToggler 
+                      //FIXME: should use Map(dynaicRecord), and shoud use id not _id (fix backend?)
+                      onClickCb={(val: boolean) => { set(item._id, { _id: item._id ,isPublic: val })}}
+                      isActive={item.isPublic} description={['public', 'private']} />
+                    : item.isPublic
+                      ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
+                      : <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-red-400 mr-2'></div> draft </div>
                 }
               </Table.Cell>
               <Table.Cell>
-                <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                  <Link href={`/post/edit/${item._id}`}>
-                    <p>Edit</p>
-                  </Link>
-                </button>
-
+                <Link href={`/post/edit/${item._id}`} className="block text-gray-900 bg-white border text-center border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                  <p>Edit</p>
+                </Link>
               </Table.Cell>
             </Table.Row>
           )
         })}
       </Table.Body>
+
     </Table>
+  )
+}
+
+type IsPublicTogglerProps = {
+  isActive: boolean
+  description: string[]
+  onClickCb: (val: boolean) => void
+}
+function IsPublicToggler({ isActive, description, onClickCb }: IsPublicTogglerProps) {
+  const [active, setActive] = useState(isActive)
+  return (
+    <div
+      onClick={() => { 
+        const curr = !active
+        setActive(curr)
+        onClickCb(curr)
+      }}
+      className='flex items-center hover:cursor-pointer select-none'>
+      {active ? <BiSolidToggleRight size={30} className="fill-green-400" /> : <BiSolidToggleLeft size={30} className="fill-red-400" />}
+      <span className='pl-2.5'>
+        {active ? description[0] : description[1]}
+      </span>
+    </div>
   )
 }

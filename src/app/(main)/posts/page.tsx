@@ -3,7 +3,7 @@ import PostList from "./PostList"
 import PostTableInfo from "@/app/_components/PostsTableInfo"
 import { PostsTable } from "@/app/_components/PostsTable"
 
-export default function Home() {
+export default function Posts() {
   return (
     <>
       <section className='p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700'>
