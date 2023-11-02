@@ -2,7 +2,8 @@
 import { gql } from '@/__generated__/gql'
 import { PostsTable } from '@/app/_components/PostsTable'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import React from 'react'
+import React, { useContext } from 'react'
+import { OnEditCtx } from './OnEditCtxWrapper'
 
 const postsQuery = gql(/* GraphQL */`
   query GetPosts($input: PaginationInput!) {
@@ -34,8 +35,11 @@ const postsQuery = gql(/* GraphQL */`
 
 function PostList() {
   const { data, error } = useSuspenseQuery(postsQuery, { variables: { input: { page: 1, pageSize: 10 } } })
+  const { onEditCtx, setOnEditCtx }  = useContext(OnEditCtx)
   return (
-    <PostsTable posts={data.getPosts} />
+    <PostsTable 
+      posts={data.getPosts} 
+      onGridEdit={(id, val) => setOnEditCtx(id, val)}/>
   )
 }
 

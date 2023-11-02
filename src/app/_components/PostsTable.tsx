@@ -1,21 +1,20 @@
 "use client"
 import React, { useState } from 'react'
 import { Table } from 'flowbite-react'
-import { GetPostsQuery } from '@/__generated__/graphql'
+import { GetPostsQuery, Post } from '@/__generated__/graphql'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MdEdit, MdUpload } from 'react-icons/md'
 import { BiSolidToggleRight, BiSolidToggleLeft } from 'react-icons/bi'
-import { useDynamicRecord } from '../_hooks/useDynamicRecord'
 
 type Props = {
   posts: GetPostsQuery['getPosts']
+  onGridEdit: (id: string, val: Partial<Post>) => void
 }
 export function PostsTable(props: Props) {
-  const { posts: { items } } = props
+  const { posts: { items }, onGridEdit } = props
+  //FIXME: useSearchParam via parent component
   const [isColStatusEdit, setIsColStatusEdit] = useState(false)
-  const { map, set, del, fromMaptoArray } = useDynamicRecord<Partial<typeof items[0]>>()
-  console.log(fromMaptoArray(map))
   return (
     <Table hoverable>
 
@@ -71,9 +70,10 @@ export function PostsTable(props: Props) {
               <Table.Cell className='px-2'>
                 {
                   isColStatusEdit
-                    ? <IsPublicToggler 
-                      //FIXME: should use Map(dynaicRecord), and shoud use id not _id (fix backend?)
-                      onClickCb={(val: boolean) => { set(item._id, { _id: item._id ,isPublic: val })}}
+                    ? <IsPublicToggler
+                      onClickCb={(val: boolean) => {
+                        onGridEdit(item._id, { _id: item._id, isPublic: val })
+                      }}
                       isActive={item.isPublic} description={['public', 'private']} />
                     : item.isPublic
                       ? <div className='flex items-center'><div className='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div> published </div>
@@ -103,7 +103,7 @@ function IsPublicToggler({ isActive, description, onClickCb }: IsPublicTogglerPr
   const [active, setActive] = useState(isActive)
   return (
     <div
-      onClick={() => { 
+      onClick={() => {
         const curr = !active
         setActive(curr)
         onClickCb(curr)
