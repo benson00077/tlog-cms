@@ -5,6 +5,7 @@ import React from 'react'
 function PostListFallback() {
   return (
     <PostsTable
+      mode='view'
       onGridEdit={() => { }}
       posts={{
         total: '11',

@@ -13,7 +13,8 @@ function PostTableInfo() {
   const mode = searchParams.get('mode')
   const isViewMode = mode === 'view'
 
-  const { onEditCtx, setOnEditCtx }  = useContext(OnEditCtx)
+  const { onEditCtx, setOnEditCtx } = useContext(OnEditCtx)
+
   return (
     <>
       <Breadcrumb aria-label="Default breadcrumb example">
@@ -40,9 +41,9 @@ function PostTableInfo() {
           {isViewMode ? <BiSolidBookReader size={16} /> : <BiSolidEditAlt size={16} />}
           <span className='pl-2'> Mode </span>
         </Button>
-        <Button 
+        <Button
           onClick={() => console.log(onEditCtx)}
-          color="gray" disabled={isViewMode}>
+          color={`${onEditCtx.length > 0 ? 'light' : 'dark'}`} disabled={isViewMode}>
           Save
         </Button>
       </Button.Group>

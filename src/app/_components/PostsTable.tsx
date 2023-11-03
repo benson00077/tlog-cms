@@ -4,17 +4,17 @@ import { Table } from 'flowbite-react'
 import { GetPostsQuery, Post } from '@/__generated__/graphql'
 import Link from 'next/link'
 import Image from 'next/image'
-import { MdEdit, MdUpload } from 'react-icons/md'
 import { BiSolidToggleRight, BiSolidToggleLeft } from 'react-icons/bi'
 
 type Props = {
   posts: GetPostsQuery['getPosts']
   onGridEdit: (id: string, val: Partial<Post>) => void
+  mode: string | null
 }
 export function PostsTable(props: Props) {
-  const { posts: { items }, onGridEdit } = props
-  //FIXME: useSearchParam via parent component
-  const [isColStatusEdit, setIsColStatusEdit] = useState(false)
+  const { posts: { items }, onGridEdit, mode } = props
+  const isEditMode = mode === 'edit'
+
   return (
     <Table hoverable>
 
@@ -29,16 +29,9 @@ export function PostsTable(props: Props) {
           Tags
         </Table.HeadCell>
         <Table.HeadCell
-          onClick={() => setIsColStatusEdit(!isColStatusEdit)}
+          // onClick={() => setIsColStatusEdit(!isColStatusEdit)}
           className='cursor-pointer group relative hover:text-purple-400 select-none'>
           Status
-          <span className='inline-block ml-2'>
-            {
-              isColStatusEdit
-                ? <MdUpload size={18} />
-                : <MdEdit size={18} />
-            }
-          </span>
         </Table.HeadCell>
         <Table.HeadCell>
           <span className="sr-only">
@@ -67,9 +60,9 @@ export function PostsTable(props: Props) {
                   )
                 })}
               </Table.Cell>
-              <Table.Cell className='px-2'>
+              <Table.Cell className='px-0'>
                 {
-                  isColStatusEdit
+                  isEditMode
                     ? <IsPublicToggler
                       onClickCb={(val: boolean) => {
                         onGridEdit(item._id, { _id: item._id, isPublic: val })
