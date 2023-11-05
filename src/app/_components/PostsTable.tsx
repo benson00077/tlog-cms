@@ -1,14 +1,14 @@
 "use client"
 import React, { useState } from 'react'
 import { Table } from 'flowbite-react'
-import { GetPostsQuery, Post } from '@/__generated__/graphql'
+import { GetPostsQuery, UpdatePostsInput } from '@/__generated__/graphql'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BiSolidToggleRight, BiSolidToggleLeft } from 'react-icons/bi'
 
 type Props = {
   posts: GetPostsQuery['getPosts']
-  onGridEdit: (id: string, val: Partial<Post>) => void
+  onGridEdit: (id: string, val: UpdatePostsInput['posts'][0]) => void
   mode: string | null
 }
 export function PostsTable(props: Props) {
@@ -65,7 +65,7 @@ export function PostsTable(props: Props) {
                   isEditMode
                     ? <IsPublicToggler
                       onClickCb={(val: boolean) => {
-                        onGridEdit(item._id, { _id: item._id, isPublic: val })
+                        onGridEdit(item._id, { id: item._id, isPublic: val })
                       }}
                       isActive={item.isPublic} description={['public', 'private']} />
                     : item.isPublic
