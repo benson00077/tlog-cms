@@ -1,10 +1,12 @@
 "use client"
 import React from 'react'
-import { Breadcrumb } from 'flowbite-react'
+import { Breadcrumb, Button } from 'flowbite-react'
 import { HiHome } from 'react-icons/hi';
 
 function PostTableInfo() {
+
   return (
+    <>
       <Breadcrumb aria-label="Default breadcrumb example">
         <Breadcrumb.Item
           href="#"
@@ -21,6 +23,7 @@ function PostTableInfo() {
           Posts
         </Breadcrumb.Item>
       </Breadcrumb>
+    </>
   )
 }
 

@@ -1,38 +1,22 @@
 import { Suspense } from "react"
 import PostList from "./PostList"
 import PostTableInfo from "@/app/_components/PostsTableInfo"
-import { PostsTable } from "@/app/_components/PostsTable"
+import OnEditCtxWrapper from "./OnEditCtxWrapper"
+import PostListFallback from "./PostListFallback"
+import PostListActions from "./PostListActions"
 
-export default function Home() {
+export default function Posts() {
   return (
-    <>
-      <section className='p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700'>
+    <OnEditCtxWrapper>
+      <section className='px-4 py-2 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700'>
         <PostTableInfo />
+        <PostListActions />
       </section>
       <section >
-        <Suspense fallback={<PostsTable posts={{
-          total: '11',
-          page: 1,
-          pageSize: 10,
-          items: [...new Array(10).fill(null)].map((_, i) => {
-            return {
-              _id: '' + i,
-              title: "...Loading...",
-              summary: "...Summary...",
-              content: '',
-              posterUrl: '',
-              tags: ['...Loading...'],
-              lastModifiedDate: '',
-              isPublic: true,
-              createdAt: '',
-              updatedAt: ''
-            }
-          })
-        }} />}>
-        {/* <Suspense fallback={<PostsTable posts={} />}> */}
+        <Suspense fallback={<PostListFallback />}>
           <PostList />
         </Suspense>
       </section>
-    </>
+    </OnEditCtxWrapper>
   )
 }

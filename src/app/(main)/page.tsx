@@ -35,7 +35,7 @@ export default function Login() {
       setJwt(jwt)
       window.localStorage.setItem('token', jwt)
       //TODO: store for user id
-      router.push("/posts")
+      router.push("/posts?mode=view")
     } catch(err) {
       console.error(err)
     }
